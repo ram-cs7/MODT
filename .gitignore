@@ -50,11 +50,7 @@ env/
 *.plan
 
 # Data
-data/raw/*
-data/**/*.coco
-data/**/train/*
-data/**/val/*
-data/**/test/*
+data/
 !data/README.md
 
 # Weights

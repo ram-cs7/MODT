@@ -51,7 +51,7 @@ MODT/
 │   ├── detectors/                 # Detection models (YOLODetector)
 │   └── trackers/                  # Tracking algorithms (5 trackers)
 │
-├── outputs/                       # Outputs & Demos (Ignored in Git)
+├── outputs/                       # Outputs & Demos
 │   └── trained_model_demo/        # Local Demo results
 │
 ├── scripts/                       # Executable scripts (14 total)
