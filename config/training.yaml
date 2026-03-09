@@ -1,0 +1,59 @@
+# Training-Specific Configuration
+# Optimized for training on workstation with GPU
+
+# Extends: default.yaml
+# Override settings for training phase
+
+system:
+  device: "cuda:0"
+  num_workers: 8  # Increase for faster data loading
+
+model:
+  detector:
+    type: "yolov8"
+    variant: "medium"  # Use larger model for training
+    input_size: [640, 640]
+
+training:
+  epochs: 300
+  batch_size: 32  # Adjust based on GPU memory
+  accumulate_grad: 2  # Effective batch size = 64
+  
+  optimizer:
+    type: "AdamW"
+    lr: 0.001
+    weight_decay: 0.0005
+  
+  scheduler:
+    type: "cosine"
+    warmup_epochs: 10
+    min_lr: 0.00001
+  
+  mixed_precision: true
+  
+  early_stopping:
+    enable: true
+    patience: 50
+
+augmentation:
+  train:
+    enable: true
+    mosaic: 0.5
+    mixup: 0.15
+    cutout: 0.3
+    hsv_augment: true
+    brightness: 0.3
+    contrast: 0.3
+
+monitoring:
+  tensorboard:
+    enable: true
+  
+  wandb:
+    enable: true
+    project: "military-object-detection-training"
+  
+  checkpoints:
+    save_period: 5
+  
+  evaluation_interval: 1

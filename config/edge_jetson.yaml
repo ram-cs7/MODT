@@ -1,0 +1,83 @@
+# Edge Deployment Configuration - Jetson Xavier NX
+# Optimized for NVIDIA Jetson Xavier NX
+
+# Extends: default.yaml
+# Override settings for edge deployment
+
+system:
+  device: "cuda:0"  # Jetson GPU
+  num_workers: 2  # Limited by Jetson CPU
+
+model:
+  detector:
+    type: "yolov8"
+    variant: "nano"  # Smallest model for edge
+    input_size: [640, 640]
+  
+  tracker:
+    type: "kalman"  # Lighter tracker
+    use_appearance: false  # Disable for speed
+
+training:
+  batch_size: 1  # Inference only
+
+inference:
+  confidence_threshold: 0.3
+  iou_threshold: 0.45
+  max_detections: 100  # Reduce for speed
+
+edge:
+  export:
+    tensorrt:
+      enable: true
+      precision: "fp16"
+      workspace_size: 2
+      max_batch_size: 1
+  
+  target_hardware:
+    platform: "jetson_xavier_nx"
+    max_power: 15
+    target_fps: 30
+
+deployment:
+  input:
+    source: "csi"  # CSI camera on Jetson
+    buffer_size: 10
+    frame_skip: 0
+  
+  preprocessing:
+    resize_method: "letterbox"
+  
+  output:
+    display: true
+    save_video: false  # Don't save to preserve storage
+    save_detections: true
+  
+  threading:
+    enable: true
+    num_threads: 2
+
+analytics:
+  zones:
+    enable: true
+  
+  alerts:
+    enable: true
+    zone_intrusion: true
+  
+  logging:
+    enable: true
+    log_detections: false  # Reduce I/O
+    log_events: true
+
+monitoring:
+  tensorboard:
+    enable: false
+  
+  wandb:
+    enable: false
+
+performance_targets:
+  fps_edge: 30
+  max_latency_ms: 100
+  model_size_mb: 30

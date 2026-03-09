@@ -1,0 +1,117 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+# *.ipynb
+
+# PyTorch
+*.pth
+*.pt
+*.ckpt
+
+# ONNX & TensorRT
+*.onnx
+*.engine
+*.plan
+
+# Data
+data/raw/*
+data/**/*.coco
+data/**/train/*
+data/**/val/*
+data/**/test/*
+!data/README.md
+
+# Weights
+weights/*.pt
+weights/*.pth
+weights/*.onnx
+weights/*.engine
+!weights/README.md
+
+# Outputs
+outputs/logs/*
+outputs/results/*
+outputs/visualizations/*
+!outputs/README.md
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# System files
+Thumbs.db
+.directory
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Documentation
+docs/_build/
+
+# Environment variables
+.env
+.env.local
+
+# Large files
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.wmv
+*.flv
+!demo.mp4
+
+# Datasets (exclude large annotation files)
+*.coco
+annotations/*.json
+!annotations/README.md
+
+# Model checkpoints (keep only specific ones)
+runs/
+exp/
+wandb/
+
+# OS specific
+*.bak
+*~
+.fuse_hidden*

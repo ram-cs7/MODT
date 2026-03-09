@@ -1,0 +1,229 @@
+# Military Object Detection & Tracking System
+# Default Configuration File
+
+# System Settings
+system:
+  name: "military-object-detection"
+  version: "1.0.0"
+  device: "cuda:0"  # cuda:0, cpu, or cuda
+  num_workers: 4
+  seed: 42
+
+# Model Configuration
+model:
+  detector:
+    type: "yolov8"  # yolov5, yolov8, faster_rcnn
+    variant: "small"  # nano, small, medium, large
+    pretrained: true
+    num_classes: 5  # background, soldier, military_vehicle, drone, civilian_vehicle
+    input_size: [640, 640]
+    
+  tracker:
+    type: "kalman"  # iou, kalman, deepsort, bytetrack
+    max_age: 30  # Maximum frames to keep alive track without detections
+    min_hits: 3  # Minimum detections before confirming track
+    iou_threshold: 0.3
+    use_appearance: true
+    appearance_feature_dim: 128
+
+# Dataset Configuration
+dataset:
+  classes:
+    0: "background"
+    1: "soldier"
+    2: "military_vehicle"
+    3: "drone"
+    4: "civilian_vehicle"
+  
+  format: "yolo"  # yolo, coco
+  
+  paths:
+    root: "./data"
+    train: "./data/train"
+    val: "./data/val"
+    test: "./data/test"
+    annotations: "./data/annotations"
+  
+  split_ratio:
+    train: 0.7
+    val: 0.15
+    test: 0.15
+  
+  image_formats: [".jpg", ".jpeg", ".png", ".bmp"]
+  video_formats: [".mp4", ".avi", ".mov", ".mkv"]
+
+# Data Augmentation
+augmentation:
+  train:
+    enable: true
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.2
+    hue: 0.1
+    flip_horizontal: 0.5
+    flip_vertical: 0.0
+    rotate: 10
+    scale: [0.8, 1.2]
+    translate: 0.1
+    mosaic: 0.5
+    mixup: 0.1
+    cutout: 0.3
+    blur: 0.1
+    noise: 0.05
+  
+  val:
+    enable: false
+
+# Training Configuration
+training:
+  epochs: 300
+  batch_size: 16
+  accumulate_grad: 1
+  
+  optimizer:
+    type: "SGD"  # SGD, Adam, AdamW
+    lr: 0.01
+    momentum: 0.937
+    weight_decay: 0.0005
+    nesterov: true
+  
+  scheduler:
+    type: "cosine"  # cosine, step, multistep, exponential
+    warmup_epochs: 5
+    warmup_momentum: 0.8
+    warmup_bias_lr: 0.1
+    min_lr: 0.0001
+  
+  loss:
+    box_loss_gain: 0.05
+    cls_loss_gain: 0.5
+    obj_loss_gain: 1.0
+    label_smoothing: 0.0
+  
+  early_stopping:
+    enable: true
+    patience: 50
+    min_delta: 0.001
+  
+  mixed_precision: true
+  gradient_clip: 10.0
+
+# Inference Configuration
+inference:
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+  max_detections: 300
+  agnostic_nms: false
+  multi_label: false
+
+# Edge Optimization
+edge:
+  export:
+    onnx:
+      enable: true
+      opset_version: 12
+      dynamic_axes: true
+      simplify: true
+    
+    tensorrt:
+      enable: true
+      precision: "fp16"  # fp32, fp16, int8
+      workspace_size: 4  # GB
+      max_batch_size: 1
+  
+  quantization:
+    enable: false
+    method: "ptq"  # ptq (post-training), qat (quantization-aware)
+    calibration_batches: 100
+  
+  pruning:
+    enable: false
+    amount: 0.3
+    method: "magnitude"
+  
+  target_hardware:
+    platform: "jetson_xavier_nx"
+    max_power: 15  # watts
+    target_fps: 30
+
+# Deployment Configuration
+deployment:
+  input:
+    source: "rtsp"  # rtsp, usb, file, csi
+    rtsp_url: "rtsp://camera_ip:port/stream"
+    usb_device: 0
+    video_file: ""
+    frame_skip: 0
+    buffer_size: 30
+  
+  preprocessing:
+    resize_method: "letterbox"  # letterbox, stretch, crop
+    normalize: true
+    mean: [0.0, 0.0, 0.0]
+    std: [255.0, 255.0, 255.0]
+  
+  output:
+    display: true
+    save_video: true
+    save_detections: true
+    output_dir: "./outputs/results"
+    fps: 30
+    codec: "mp4v"
+  
+  threading:
+    enable: true
+    num_threads: 2
+
+# Analytics Configuration
+analytics:
+  zones:
+    enable: true
+    definitions: []  # List of zone polygons
+  
+  tracking_analytics:
+    trajectory_length: 50
+    speed_estimation: true
+    direction_estimation: true
+    dwell_time: true
+  
+  alerts:
+    enable: true
+    zone_intrusion: true
+    loitering: true
+    abandoned_object: false
+    crowd_detection: false
+  
+  logging:
+    enable: true
+    log_detections: true
+    log_tracks: true
+    log_events: true
+    format: "json"  # json, csv
+
+# Monitoring and Logging
+monitoring:
+  tensorboard:
+    enable: true
+    log_dir: "./outputs/logs/tensorboard"
+  
+  wandb:
+    enable: false
+    project: "military-object-detection"
+    entity: ""
+    tags: ["yolov8", "deepsort", "edge"]
+  
+  checkpoints:
+    save_dir: "./weights"
+    save_best: true
+    save_last: true
+    save_period: 10  # epochs
+  
+  evaluation_interval: 5  # epochs
+
+# Performance Targets
+performance_targets:
+  detection_map: 0.85
+  fps_pc: 60
+  fps_edge: 30
+  max_latency_ms: 150
+  model_size_mb: 50

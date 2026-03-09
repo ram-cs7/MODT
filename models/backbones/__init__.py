@@ -1,0 +1,1 @@
+from .simple_cnn import SimpleCNN, create_reid_backbone
