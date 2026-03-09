@@ -36,9 +36,8 @@ MODT/
 │   ├── training.yaml              # Training parameters
 │   └── edge_jetson.yaml           # Jetson deployment config
 │
-├── data/                          # Datasets
-│   └── military/assets/           # Military datasets
-│       └── military_object_dataset/  # Main dataset (26K images, 12 classes)
+├── data/                          # Datasets (Ignored in Git)
+│   └── military/assets/           # Military dataset (26K images)
 │
 ├── docs/                          # Documentation
 │   ├── ARCHITECTURE.md            # System architecture
@@ -52,16 +51,8 @@ MODT/
 │   ├── detectors/                 # Detection models (YOLODetector)
 │   └── trackers/                  # Tracking algorithms (5 trackers)
 │
-├── notebooks/                     # Jupyter notebooks
-│   ├── 01_dataset_preparation.ipynb
-│   ├── 02_model_training.ipynb
-│   └── 03_edge_optimization.ipynb
-│
-├── outputs/                       # Training outputs
-│   ├── demo_output.mp4            # Demo video
-│   ├── military_train/            # Baseline YOLOv8n model
-│   ├── yolov8s_train/             # Best model (YOLOv8s, 75 epochs)
-│   └── trained_model_demo/        # Demo results
+├── outputs/                       # Outputs & Demos (Ignored in Git)
+│   └── trained_model_demo/        # Local Demo results
 │
 ├── scripts/                       # Executable scripts (14 total)
 │   ├── train_detector.py          # Model training
@@ -95,7 +86,7 @@ MODT/
 │   └── test_integration.py        # Integration tests
 │
 ├── weights/                       # Pre-trained weights
-│   └── yolov8n.pt                 # YOLOv8 nano base (6.5MB)
+│   └── best.pt                    # Best trained YOLOv8s model
 │
 ├── .env                           # Environment variables
 ├── .gitignore                     # Git ignore rules
